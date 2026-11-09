@@ -3,7 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { correlationIdMiddleware } from './middleware/correlationId';
 import { errorHandler } from './middleware/errorHandler';
+import { createRateLimiter } from './middleware/rateLimiter';
 import { healthRouter } from './routes/health.routes';
+import { authRouter } from './routes/auth.routes';
+import { onboardingRouter } from './routes/onboarding.routes';
+import { accountRouter } from './routes/account.routes';
+import { adminRouter } from './routes/admin.routes';
 import { config } from './config';
 
 export const createApp = (): Express => {
@@ -32,7 +37,36 @@ export const createApp = (): Express => {
   // 5. System Probes
   app.use(healthRouter);
 
-  // 6. Centralized Error Handling
+  // 6. Rate Limiters
+  const authRateLimiter = createRateLimiter({
+    windowMs: config.RATE_LIMIT_AUTH_WINDOW_MS,
+    max: config.RATE_LIMIT_AUTH_MAX,
+    keyPrefix: 'auth',
+    message: 'Too many authentication attempts. Please wait 1 minute before trying again.',
+  });
+
+  const apiRateLimiter = createRateLimiter({
+    windowMs: config.RATE_LIMIT_API_WINDOW_MS,
+    max: config.RATE_LIMIT_API_MAX,
+    keyPrefix: 'api',
+  });
+
+  // 7. API Routes
+  app.use('/api/auth', authRateLimiter, authRouter);
+  app.use('/api/onboarding', apiRateLimiter, onboardingRouter);
+  app.use('/api/accounts', apiRateLimiter, accountRouter);
+  app.use('/api/admin', apiRateLimiter, adminRouter);
+
+  // 8. 404 Route Handler
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      error: `Endpoint '${req.method} ${req.path}' not found`,
+      correlationId: req.correlationId,
+    });
+  });
+
+  // 9. Centralized Error Handling
   app.use(errorHandler);
 
   return app;

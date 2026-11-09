@@ -1,4 +1,6 @@
 import { Router, Request, Response } from 'express';
+import { prisma } from '../prisma';
+import { isRedisConnected } from '../redis';
 
 export const healthRouter = Router();
 
@@ -17,21 +19,34 @@ healthRouter.get('/ready', async (req: Request, res: Response) => {
   const checks: Record<string, { status: string; latencyMs?: number; error?: string }> = {};
   let isReady = true;
 
-  // Check 1: Process responsiveness
+  // 1. Process check
   checks.process = { status: 'UP' };
 
-  // We will attach dynamic checks for PostgreSQL and Redis as those clients are initialized
-  if (!isReady) {
-    res.status(503).json({
+  // 2. PostgreSQL check
+  try {
+    const start = Date.now();
+    await prisma.$queryRaw`SELECT 1`;
+    checks.database = {
+      status: 'UP',
+      latencyMs: Date.now() - start,
+    };
+  } catch (err) {
+    isReady = false;
+    checks.database = {
       status: 'DOWN',
-      timestamp: new Date().toISOString(),
-      dependencies: checks,
-    });
-    return;
+      error: 'Database connection failed',
+    };
   }
 
-  res.status(200).json({
-    status: 'UP',
+  // 3. Redis check
+  checks.redis = {
+    status: isRedisConnected ? 'UP' : 'DEGRADED_FALLBACK_ACTIVE',
+  };
+
+  const httpStatus = isReady ? 200 : 503;
+
+  res.status(httpStatus).json({
+    status: isReady ? 'UP' : 'DOWN',
     timestamp: new Date().toISOString(),
     dependencies: checks,
   });
