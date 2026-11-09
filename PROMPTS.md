@@ -55,7 +55,7 @@
   4. Successful bootstrap creation when system is clean and secret is valid.
   Ran Vitest test runner (All 4 bootstrap tests passed).
 - **Git Commit Reference**:
-  *Will be linked in Phase 3–13 feature commit.*
+  `3421124` — *feat: complete BalanceVault platform - auth, rbac, bootstrap, onboarding, accounts, audit trail, rate limiting, frontend, and tests*
 
 ---
 
@@ -79,7 +79,7 @@
 - **How I Tested It**:
   Verified during registration, login, onboarding, and transfer test suites that audit entries are generated with redacted passwords and immutable timestamps.
 - **Git Commit Reference**:
-  *Will be linked in Phase 3–13 feature commit.*
+  `3421124` — *feat: complete BalanceVault platform - auth, rbac, bootstrap, onboarding, accounts, audit trail, rate limiting, frontend, and tests*
 
 ---
 
@@ -108,7 +108,7 @@
   3. Verified admin self-approval of onboarding fails with HTTP 403.
   4. Verified double-entry transfer with idempotency key avoids duplicate deductions.
 - **Git Commit Reference**:
-  *Will be linked in Phase 3–13 feature commit.*
+  `3421124` — *feat: complete BalanceVault platform - auth, rbac, bootstrap, onboarding, accounts, audit trail, rate limiting, frontend, and tests*
 
 ---
 
@@ -132,6 +132,6 @@
 - **How I Tested It**:
   Created `src/__tests__/rateLimiter.test.ts` testing 4 sequential requests against a 3-request limit threshold; verified the 4th request is blocked with HTTP 429 Too Many Requests and Retry-After headers under fallback mode.
 - **Git Commit Reference**:
-  *Will be linked in Phase 3–13 feature commit.*
+  `3421124` — *feat: complete BalanceVault platform - auth, rbac, bootstrap, onboarding, accounts, audit trail, rate limiting, frontend, and tests*
 
 ---
