@@ -1,0 +1,179 @@
+// BalanceVault Prisma Schema
+// Money Movement with a Ledger You Can Prove
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  ACCOUNT_HOLDER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING
+}
+
+enum OnboardingStatus {
+  REGISTERED
+  PROFILE_INCOMPLETE
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+enum AuditOutcome {
+  SUCCESS
+  FAILURE
+}
+
+enum TransactionStatus {
+  POSTED
+  REVERSED
+}
+
+enum LedgerEntryType {
+  DEBIT
+  CREDIT
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  role         Role       @default(ACCOUNT_HOLDER)
+  status       UserStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  profile               UserProfile?
+  onboardingApplication OnboardingApplication?
+  reviewedApplications  OnboardingApplication[] @relation("ReviewedByAdmin")
+  accounts              Account[]
+  auditLogs             AuditLog[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model UserProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  fullName         String
+  phoneNumber      String
+  dateOfBirth      String?
+  address          String?
+  nationalIdMasked String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([phoneNumber])
+}
+
+model OnboardingApplication {
+  id            String           @id @default(uuid())
+  userId        String           @unique
+  status        OnboardingStatus @default(REGISTERED)
+  submittedData Json?
+  reviewerId    String?
+  reviewNotes   String?
+  reviewedAt    DateTime?
+  submittedAt   DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  user     User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewer User? @relation("ReviewedByAdmin", fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+}
+
+model Account {
+  id            String        @id @default(uuid())
+  accountNumber String        @unique
+  userId        String
+  accountType   AccountType   @default(CHECKING)
+  status        AccountStatus @default(PENDING)
+  currency      String        @default("USD")
+  balance       Decimal       @default(0.00) @db.Decimal(18, 4)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  ledgerEntries LedgerEntry[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model AuditLog {
+  id            String       @id @default(uuid())
+  actorId       String?
+  actorRole     String?
+  action        String
+  targetEntity  String
+  targetId      String
+  metadata      Json?
+  ipAddress     String?
+  correlationId String?
+  outcome       AuditOutcome @default(SUCCESS)
+  createdAt     DateTime     @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt(sort: Desc)])
+  @@index([action, createdAt(sort: Desc)])
+  @@index([targetEntity, targetId])
+  @@index([correlationId])
+}
+
+model Transaction {
+  id              String            @id @default(uuid())
+  idempotencyKey  String            @unique
+  referenceNumber String            @unique
+  description     String
+  status          TransactionStatus @default(POSTED)
+  createdAt       DateTime          @default(now())
+
+  entries LedgerEntry[]
+
+  @@index([referenceNumber])
+}
+
+model LedgerEntry {
+  id            String          @id @default(uuid())
+  transactionId String
+  accountId     String
+  entryType     LedgerEntryType
+  amount        Decimal         @db.Decimal(18, 4)
+  balanceAfter  Decimal         @db.Decimal(18, 4)
+  createdAt     DateTime        @default(now())
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+  account     Account     @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@index([transactionId])
+  @@index([accountId, createdAt(sort: Desc)])
+}

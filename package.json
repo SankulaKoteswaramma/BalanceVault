@@ -1,0 +1,22 @@
+{
+  "name": "balancevault-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BalanceVault — Money Movement with a Ledger You Can Prove",
+  "scripts": {
+    "dev": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "test": "npm run test --prefix backend",
+    "lint": "npm run lint --prefix backend && npm run lint --prefix frontend"
+  },
+  "keywords": [
+    "fintech",
+    "ledger",
+    "audit-trail",
+    "rbac",
+    "balancevault"
+  ],
+  "author": "Snovasys Fresher Challenge Candidate",
+  "license": "UNLICENSED"
+}
