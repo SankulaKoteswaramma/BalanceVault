@@ -16,7 +16,8 @@ backend/src/__tests__/
   ├── bootstrap.test.ts         (4 tests: First-Admin bootstrap security)
   ├── auth_rbac.test.ts         (6 tests: Registration, Login, RBAC, Privilege Escalation)
   ├── onboarding_account.test.ts(3 tests: Self-approval block, Idempotency, Overdraft prevention)
-  └── rateLimiter.test.ts       (1 test: Sliding-window rate limit enforcement & 429 status)
+  ├── rateLimiter.test.ts       (1 test: Sliding-window rate limit enforcement & 429 status)
+  └── e2e_workflow.test.ts      (7 tests: Complete End-to-End candidate submission journey)
 ```
 
 ---
@@ -29,7 +30,7 @@ cd backend
 npm test
 ```
 
-### Summary of Executed Tests (17/17 Passed — 100% Pass Rate)
+### Summary of Executed Tests (24/24 Passed — 100% Pass Rate)
 
 | Test File | Test Case | Assertion / Security Invariant | Status |
 | :--- | :--- | :--- | :--- |
