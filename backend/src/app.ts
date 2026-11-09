@@ -19,9 +19,23 @@ export const createApp = (): Express => {
     contentSecurityPolicy: config.NODE_ENV === 'production' ? undefined : false,
   }));
 
-  // 2. Strict Cross-Origin Resource Sharing
+  // 2. Strict Cross-Origin Resource Sharing with automatic trailing slash normalization
+  const allowedOrigin = config.FRONTEND_URL ? config.FRONTEND_URL.replace(/\/+$/, '') : '*';
+
   app.use(cors({
-    origin: config.FRONTEND_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, postman, health checks)
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/+$/, '');
+      if (allowedOrigin === '*' || cleanOrigin === allowedOrigin) {
+        return callback(null, true);
+      }
+      // Also allow any vercel preview domains if needed
+      if (cleanOrigin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Correlation-ID', 'Idempotency-Key'],
