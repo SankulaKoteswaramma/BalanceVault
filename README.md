@@ -6,187 +6,258 @@
 [![React](https://img.shields.io/badge/React-v18.3-61dafb.svg)](https://react.dev/)
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2d3748.svg)](https://www.prisma.io/)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v3.4-38bdf8.svg)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-24%20Passed-brightgreen.svg)]()
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ed.svg)](https://www.docker.com/)
+[![Tests](https://img.shields.io/badge/Tests-24%20Passed%20(100%25)-brightgreen.svg)]()
 
 ---
 
-## 1. Project Overview
+## 1. Project Overview & Objectives
 
-**BalanceVault** is a secure, auditable account management and financial ledger platform built for the **Snovasys Fresher Hiring Challenge 2026**.
+**BalanceVault** is an enterprise-grade, secure account management and financial ledger platform developed for the **Snovasys Fresher Hiring Challenge 2026**.
 
-The application demonstrates that financial account operations can be strictly controlled, traceable, and protected against unauthorized access, privilege escalation, and historical tampering.
+The platform proves that financial account operations can be strictly controlled, traceable, and protected against unauthorized access, privilege escalation, and historical tampering.
 
-### Core Objectives
-1. **Secure Onboarding**: Multi-stage identity verification workflow (`REGISTERED` &rarr; `PENDING_REVIEW` &rarr; `APPROVED`/`REJECTED`).
-2. **Centralized RBAC**: Strict separation of duties across `SUPER_ADMIN`, `ADMIN`, and `ACCOUNT_HOLDER`.
-3. **First-Administrator Bootstrap**: Controlled, single-execution bootstrap mechanism protected by a high-entropy secret.
-4. **Append-Only Audit Trail**: Tamper-resistant historical audit logging enforced via PostgreSQL least-privilege roles and metadata secret sanitization.
-5. **Double-Entry Financial Integrity**: Balanced ledger movements (`DEBIT` = `CREDIT`) with idempotency key deduplication and zero-floor overdraft prevention.
-6. **Resilient Rate Limiting**: Redis-backed sliding-window rate limiting with automatic in-memory fail-secure fallback.
-7. **System Observability**: Distinct shallow liveness (`/health`) and deep dependency readiness (`/ready`) probes.
-
----
-
-## 2. Technology Stack
-
-### Frontend
-- **Framework**: React 18 with TypeScript & Vite
-- **Styling**: Tailwind CSS with custom fintech design tokens
-- **Routing**: React Router v6 with `ProtectedRoute` role guards
-- **Form State & Validation**: React Hook Form with Zod resolvers
-- **Icons**: Lucide React
-- **HTTP Client**: Axios with JWT Bearer interceptors
-
-### Backend
-- **Runtime**: Node.js v24 with TypeScript & Express
-- **Database & ORM**: PostgreSQL with Prisma ORM
-- **Cache & Rate Limiting**: Redis with ioredis and resilient in-memory sliding window fallback
-- **Authentication**: RFC 7519 JWT and bcrypt (12 rounds)
-- **Validation**: Strict Zod schemas with `.strict()` parsing
-- **Security Headers**: Helmet & strict Origin CORS
-- **Testing**: Vitest & Supertest (17 automated tests)
+### Core Capabilities
+- **Multi-Stage KYC Onboarding**: Complete state machine (`REGISTERED` &rarr; `PENDING_REVIEW` &rarr; `APPROVED` / `REJECTED`) with an administrative review dossier and self-approval prevention.
+- **Centralized Role-Based Access Control (RBAC)**: Strict separation across `SUPER_ADMIN`, `ADMIN`, and `ACCOUNT_HOLDER` with deny-by-default route guards and IDOR protection.
+- **First-Administrator Bootstrap**: A single-execution CLI / service mechanism protected by a high-entropy secret, atomic database verification, and permanent lock against re-execution.
+- **Append-Only Tamper-Resistant Audit Trail**: Immutable logging enforced by application constraints and PostgreSQL least-privilege roles, with automatic recursive redaction of sensitive credentials.
+- **Double-Entry Financial Integrity**: Multi-legged balanced transactions (`DEBIT` = `CREDIT`) with client-side idempotency key deduplication and zero-floor overdraft prevention.
+- **Resilient Sliding-Window Rate Limiting**: Redis-backed sliding-window rate limiting with automatic in-memory fail-secure fallback during Redis outages.
+- **System Observability**: Shallow liveness (`/health`) and deep PostgreSQL/Redis readiness (`/ready`) probes.
 
 ---
 
-## 3. Architecture & Subsystems
+## 2. Pre-Seeded Demonstration Accounts
 
-```mermaid
-flowchart TD
-    Client[React 18 SPA] --> Proxy[Reverse Proxy / TLS]
-    Proxy --> Security[Helmet & CORS & RateLimiter]
-    Security --> Auth[JWT Auth & RBAC Guard]
-    Auth --> Service[Onboarding & Account Services]
-    Service --> Postgres[(PostgreSQL Database)]
-    Service --> Redis[(Redis In-Memory Store)]
-    Service --> Audit[Append-Only Audit Logger]
-```
+The database comes pre-seeded with four distinct accounts covering all roles and onboarding lifecycles:
 
-Detailed architectural blueprints are documented in:
-- [Architecture Specification](docs/ARCHITECTURE.md)
-- [Database Design & Roles](docs/DATABASE_DESIGN.md)
-- [Security Specification](docs/SECURITY.md)
-- [Threat Model (THREATS.md)](THREATS.md)
-- [API Documentation](docs/API_DOCUMENTATION.md)
-- [Testing Report](docs/TESTING.md)
+| Role | Email Address | Password | Permissions & Experience |
+| :--- | :--- | :--- | :--- |
+| **Super Administrator** | `superadmin@balancevault.com` | `VaultAdmin@2026!` | Administrative metrics, user directory, status suspensions, staff role assignments, and append-only audit trail inspection. |
+| **Compliance Officer** | `compliance.officer@balancevault.com` | `Compliance@2026!` | KYC onboarding review queue: inspect applicant dossiers, approve or reject applications with mandatory notes, and lock account statuses. |
+| **Approved Customer** | `alice.customer@balancevault.com` | `CustomerPass@2026!` | Verified customer with active Checking & Savings accounts ($24,500 balance), enabled for double-entry money transfers. |
+| **Pending Applicant** | `bob.applicant@balancevault.com` | `ApplicantPass@2026!` | Customer who submitted KYC documentation and is currently in `PENDING_REVIEW` state awaiting compliance review. |
 
 ---
 
-## 4. User Roles & Access Control
+## 3. How to Run the Project
 
-| Role | Permissions & Responsibilities |
-| :--- | :--- |
-| **SUPER_ADMIN** | Full administrative oversight, user status modification, staff role assignment, audit log inspection, system metrics. |
-| **ADMIN** | Onboarding application review (approval/rejection with mandatory justification), account status management, audit inspection. Cannot alter user roles or approve their own KYC. |
-| **ACCOUNT_HOLDER** | Public registration, KYC profile submission, review status tracking, account balance viewing, executing idempotent double-entry transfers. |
+You can run BalanceVault in **two ways**: via Docker Compose (all-in-one) or locally via Node.js.
 
----
+### Option A: Running with Docker Compose (Recommended All-in-One)
 
-## 5. First-Administrator Bootstrap
+Prerequisites: [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 
-To guarantee security:
-- Public administrator registration is strictly prohibited.
-- The system provides a controlled CLI bootstrap utility:
-  ```bash
-  npm run bootstrap:admin --prefix backend
-  ```
-- **Security Invariant**: The bootstrap verifies that **no administrator exists** anywhere in the database. If an administrator is already present or if the `BOOTSTRAP_SECRET` is invalid, the process immediately aborts and logs an audit failure.
-
----
-
-## 6. Installation & Local Setup
-
-### Prerequisites
-- Node.js >= 20.x
-- npm >= 10.x
-- PostgreSQL instance (or cloud connection via Neon/Supabase/Railway)
-- Redis instance (optional: automatic in-memory fallback will activate if offline)
-
-### Step 1: Clone and Configure Environment
+#### Step 1: Start All Containers
+From the root project directory:
 ```bash
-git clone <repository_url>
-cd Snovasys
-cp .env.example backend/.env
+docker compose up -d --build
+```
+This builds and starts 4 services:
+- **Frontend SPA**: `http://localhost:5173`
+- **Backend API**: `http://localhost:5000`
+- **PostgreSQL Database**: `localhost:5432`
+- **Redis Cache**: `localhost:6379`
+
+#### Step 2: Initialize Database Schema & Seed Data
+```bash
+# Push schema to PostgreSQL
+docker compose exec backend npx prisma db push
+
+# Seed demonstration accounts
+docker compose exec backend npx tsx prisma/seed.ts
 ```
 
-Review `backend/.env` and update `DATABASE_URL` with your PostgreSQL credentials:
+#### Step 3: Open in Your Browser
+- Web Application: **[http://localhost:5173](http://localhost:5173)**
+- Backend Health Probe: **[http://localhost:5000/health](http://localhost:5000/health)**
+- Backend Readiness Probe: **[http://localhost:5000/ready](http://localhost:5000/ready)**
+
+---
+
+### Option B: Running Locally with Node.js (Without Docker)
+
+Prerequisites: Node.js >= 20.x, npm >= 10.x, and a PostgreSQL database (local or cloud like Neon.tech).
+
+#### Step 1: Install Dependencies
+```bash
+# Install backend dependencies
+cd backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+#### Step 2: Configure Environment Variables
+Copy `.env.example` in `backend/`:
+```bash
+cd backend
+cp ../.env.example .env
+```
+Ensure `DATABASE_URL` in `backend/.env` points to your PostgreSQL instance:
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/balancevault?schema=public
-BOOTSTRAP_SECRET=balancevault_super_secret_bootstrap_key_32_bytes!
+DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/balancevault?schema=public"
 ```
 
-### Step 2: Install Dependencies
-```bash
-# Backend dependencies
-cd backend && npm install
-
-# Frontend dependencies
-cd ../frontend && npm install
-```
-
-### Step 3: Run Database Migrations
+#### Step 3: Sync Database & Seed Demo Accounts
 ```bash
 cd backend
-npx prisma generate
-npx prisma migrate dev --name init
+npx prisma db push
+npm run prisma:seed
 ```
 
-### Step 4: Bootstrap Initial Super Administrator
-```bash
-cd backend
-ADMIN_BOOTSTRAP_EMAIL=superadmin@balancevault.com \
-ADMIN_BOOTSTRAP_PASSWORD=VaultAdmin@2026! \
-BOOTSTRAP_SECRET=balancevault_super_secret_bootstrap_key_32_bytes! \
-npm run bootstrap:admin
-```
+#### Step 4: Start Development Servers
+Open two terminal windows:
 
-### Step 5: Start Development Servers
-```bash
-# Terminal 1: Backend API (Port 5000)
-cd backend && npm run dev
+- **Terminal 1 (Backend API on Port 5000)**:
+  ```bash
+  cd backend
+  npm run dev
+  ```
+- **Terminal 2 (Frontend SPA on Port 5173)**:
+  ```bash
+  cd frontend
+  npm run dev
+  ```
 
-# Terminal 2: Frontend SPA (Port 5173)
-cd frontend && npm run dev
-```
-
-Open your browser to: `http://localhost:5173`
+Open **[http://localhost:5173](http://localhost:5173)** in your browser!
 
 ---
 
-## 7. Automated Test Suite
+## 4. Cloud Deployment (Render + Vercel + Neon)
 
-Run the full suite of 17 automated security and integration tests:
+### 1. Database (Neon.tech)
+1. Create a free PostgreSQL project at [Neon.tech](https://neon.tech).
+2. Copy the connection string (`postgresql://...@...neon.tech/neondb?sslmode=require`).
+
+### 2. Backend API (Render.com)
+1. Create a **New Web Service** connected to your GitHub repository `SankulaKoteswaramma/BalanceVault`.
+2. Settings:
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install && npx prisma db push && npm run build`
+   - **Start Command**: `node dist/server.js`
+3. Environment Variables:
+   - `NODE_ENV`: `production`
+   - `PORT`: `5000`
+   - `DATABASE_URL`: *(Your Neon connection string)*
+   - `JWT_SECRET`: `vault_super_secret_jwt_key_32_bytes_long_render_2026!`
+   - `BOOTSTRAP_SECRET`: `vault_bootstrap_secret_token_render_2026_challenge!`
+   - `FRONTEND_URL`: `https://your-app.vercel.app`
+
+### 3. Frontend SPA (Vercel.com)
+1. Import `SankulaKoteswaramma/BalanceVault` on [Vercel](https://vercel.com).
+2. Settings:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `frontend`
+3. Environment Variables:
+   - `VITE_API_URL`: `https://your-render-backend.onrender.com/api`
+4. Deploy!
+
+---
+
+## 5. Automated Test Suite
+
+BalanceVault includes **24 automated unit, integration, security, and end-to-end tests** with a 100% pass rate:
+
 ```bash
 cd backend
 npm test
 ```
 
-### Test Coverage Highlights
-- First-admin bootstrap security, invalid secrets, and duplicate execution guards.
-- Public registration role hardcoding to `ACCOUNT_HOLDER`.
-- Centralized RBAC denying customer access to administrative endpoints (HTTP 403).
-- Prohibition of administrator KYC self-approval (HTTP 403).
-- Financial transfer idempotency: replayed idempotency keys return existing transactions without duplicate deductions.
-- Overdraft protection: transfers exceeding balances fail with HTTP 400.
-- Rate limiting: sliding window throttling blocks excessive attempts with HTTP 429.
-- Health and deep readiness checks checking PostgreSQL connectivity.
+### Test Suite Breakdown
+
+| Suite File | Test Count | Security Invariants Covered |
+| :--- | :---: | :--- |
+| `health.test.ts` | 3 | Shallow liveness probe and deep PostgreSQL connection readiness checking. |
+| `bootstrap.test.ts` | 4 | First-admin bootstrap security, invalid secrets rejection, duplicate creation block, weak password rejection. |
+| `auth_rbac.test.ts` | 6 | Password confirmation matching, password policy enforcement, public signup role hardcoding, denial of customer access to admin routes (HTTP 403), denial of staff role modification by normal admin. |
+| `onboarding_account.test.ts` | 3 | Admin self-approval block (HTTP 403), double-entry transfer idempotency replay protection, overdraft prevention (HTTP 400). |
+| `rateLimiter.test.ts` | 1 | Sliding-window threshold enforcement, blocking after max requests with HTTP 429 and Retry-After headers. |
+| `e2e_workflow.test.ts` | 7 | Complete 7-step candidate submission simulation from registration to admin review, account provisioning, double-entry transfers, and audit log inspection. |
 
 ---
 
-## 8. Requirements Traceability
+## 6. Project Architecture & Directory Structure
 
-Every requirement from both the updated BalanceVault specification and the original LedgerLine financial integrity rubric is indexed in [REQUIREMENTS_TRACEABILITY.md](REQUIREMENTS_TRACEABILITY.md).
+```
+BalanceVault/
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma           # PostgreSQL models, enums & relations
+│   │   └── seed.ts                 # Pre-configured demonstration data seed script
+│   ├── src/
+│   │   ├── config/                 # Typed environment validation with Zod
+│   │   ├── controllers/            # HTTP controllers (auth, onboarding, accounts, admin)
+│   │   ├── middleware/             # RBAC guards, rate limiters, correlation IDs, error handlers
+│   │   ├── routes/                 # REST route definitions
+│   │   ├── scripts/                # First-administrator bootstrap CLI
+│   │   ├── services/               # Pure business logic, state machines, audit loggers
+│   │   ├── utils/                  # Cryptographic utilities, JSON loggers
+│   │   ├── validators/             # Strict Zod request schemas
+│   │   ├── app.ts                  # Express application setup, Helmet & CORS
+│   │   ├── prisma.ts               # Prisma client singleton & query event logger
+│   │   ├── redis.ts                # Redis client with in-memory fallback
+│   │   └── server.ts               # HTTP server lifecycle & graceful shutdown
+│   ├── Dockerfile                  # Multi-stage production container build
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/             # Navigation, protected routes, modals
+│   │   ├── context/                # AuthContext with session lifecycle & JWT storage
+│   │   ├── layouts/                # Dashboard responsive layout with role distinction
+│   │   ├── pages/                  # Landing, Login, Register, User & Admin portals
+│   │   ├── services/               # Axios API client with dynamic VITE_API_URL
+│   │   ├── types/                  # Shared TypeScript interfaces & enums
+│   │   ├── App.tsx                 # Route hierarchy & role guards
+│   │   └── main.tsx                # React 18 DOM mount point
+│   ├── Dockerfile                  # Multi-stage build with Nginx static hosting
+│   ├── nginx.conf                  # Nginx reverse proxy & SPA fallback routing
+│   ├── vercel.json                 # Vercel SPA rewrite configuration
+│   └── package.json
+│
+├── docs/
+│   ├── ARCHITECTURE.md             # High-level architecture specification
+│   ├── DATABASE_DESIGN.md          # Database ER diagram & least-privilege role DDL
+│   ├── SECURITY.md                 # Threat defense model & cryptographic standards
+│   ├── API_DOCUMENTATION.md        # Full REST API request/response catalog
+│   ├── TESTING.md                  # Automated testing report & verification matrix
+│   ├── DEPLOYMENT.md               # Production deployment runbook
+│   └── INTERVIEW_PREP.md           # 14-step interview demonstration cheat sheet & technical Q&A
+│
+├── REQUIREMENTS_TRACEABILITY.md    # Snovasys requirements traceability matrix
+├── THREATS.md                      # STRIDE threat model with verified test evidence
+├── PROMPTS.md                      # AI interaction audit log (5 dated entries + commit links)
+├── docker-compose.yml              # All-in-one local multi-container composition
+└── README.md                       # Master project documentation
+```
 
 ---
 
-## 9. AI Development Audit Log
+## 7. Troubleshooting Common Issues
 
-As mandated by official instructions, all AI interactions, investigated risks, architectural corrections, and genuine commit hashes are documented in [PROMPTS.md](PROMPTS.md) with five dated entries covering least-privilege DB roles, bootstrap protection, audit log secret redaction, centralized RBAC, and rate-limiting resilience.
+### Issue 1: `Error: listen EADDRINUSE: address already in use :::5000`
+- **Cause**: Port 5000 is already in use (most commonly because Docker Compose is running the backend).
+- **Fix**: Either stop the Docker backend with `docker compose stop backend`, or change `PORT=5001` in `backend/.env`.
+
+### Issue 2: `failed to connect to the docker API at npipe:////./pipe/docker_engine`
+- **Cause**: Docker Desktop is installed but not open.
+- **Fix**: Launch **Docker Desktop** from the Windows Start Menu and wait until the whale icon in your taskbar turns steady green ("Engine running").
+
+### Issue 3: `CORS blocked for origin: http://localhost:5174`
+- **Cause**: Vite selected port 5174 because 5173 was busy.
+- **Fix**: The backend CORS middleware automatically allows all `http://localhost:*`, `http://127.0.0.1:*`, and `*.vercel.app` origins. Simply refresh the page.
 
 ---
 
-## 10. License & Submission Details
+## 8. Snovasys Candidate Submission Information
 
-- **Author**: Koteswararao S (`srkotesh03@gmail.com`)
-- **Event**: Snovasys Fresher Hiring Challenge 2026
+- **Candidate Name**: Koteswararao S
+- **Candidate Email**: `srkotesh03@gmail.com`
+- **GitHub Repository**: [`https://github.com/SankulaKoteswaramma/BalanceVault.git`](https://github.com/SankulaKoteswaramma/BalanceVault.git)
 - **Challenge Period**: 6 November 2026 – 12 November 2026
-- **License**: UNLICENSED (Candidate Assessment Submission)
+- **Challenge Portal**: [https://hackathon.snovasys.com/project/768](https://hackathon.snovasys.com/project/768)
+- **Submission Requirements**: All 21 mandatory requirements and financial ledger integrity requirements are verified, tested, and documented.
