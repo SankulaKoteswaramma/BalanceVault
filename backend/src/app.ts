@@ -24,17 +24,23 @@ export const createApp = (): Express => {
 
   app.use(cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, postman, health checks)
+      // Allow requests with no origin (like mobile apps, curl, postman, health probes)
       if (!origin) return callback(null, true);
       const cleanOrigin = origin.replace(/\/+$/, '');
+
+      // Allow configured frontend URL or wildcard
       if (allowedOrigin === '*' || cleanOrigin === allowedOrigin) {
         return callback(null, true);
       }
-      // Also allow any vercel preview domains if needed
+      // Allow localhost and 127.0.0.1 on any port for local development
+      if (cleanOrigin.startsWith('http://localhost:') || cleanOrigin.startsWith('http://127.0.0.1:')) {
+        return callback(null, true);
+      }
+      // Allow any Vercel deployment domains
       if (cleanOrigin.endsWith('.vercel.app')) {
         return callback(null, true);
       }
-      callback(new Error(`CORS blocked for origin: ${origin}`));
+      callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
