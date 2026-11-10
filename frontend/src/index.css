@@ -4,13 +4,17 @@
 
 @layer base {
   body {
-    @apply bg-cream-100 text-ink-900 font-sans;
+    background-color: #faf8f5;
+    color: #0a0a0a;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     background-image: radial-gradient(rgba(18, 18, 18, 0.04) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight text-ink-950;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.025em;
+    color: #050505;
   }
 }
 
