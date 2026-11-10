@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,6 +12,8 @@ import {
   AlertCircle,
   FileCheck,
   Send,
+  ArrowLeft,
+  Vault,
 } from 'lucide-react';
 
 const onboardingSchema = z.object({
@@ -26,6 +29,7 @@ const onboardingSchema = z.object({
 type OnboardingFormData = z.infer<typeof onboardingSchema>;
 
 export const OnboardingPage: React.FC = () => {
+  const navigate = useNavigate();
   const { refreshUser } = useAuth();
   const [app, setApp] = useState<OnboardingApplication | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -90,7 +94,26 @@ export const OnboardingPage: React.FC = () => {
   const status = app?.status || 'REGISTERED';
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Top Navigation Bar with Back Button & Main Logo */}
+      <div className="flex items-center justify-between pb-2 border-b border-cream-300">
+        <button
+          type="button"
+          onClick={() => navigate('/dashboard')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Dashboard</span>
+        </button>
+
+        <div className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault</span>
+        </div>
+      </div>
+
       {/* Title */}
       <div>
         <h1 className="text-2xl md:text-3xl font-display font-extrabold text-ink-950 tracking-tight">
@@ -102,7 +125,7 @@ export const OnboardingPage: React.FC = () => {
       </div>
 
       {/* State Progress Bar (White/Cream/Black/Red) */}
-      <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+      <div className="vault-card-static p-6 rounded-3xl">
         <div className="flex items-center justify-between max-w-2xl mx-auto">
           {/* Step 1 */}
           <div className="flex flex-col items-center">
@@ -201,7 +224,7 @@ export const OnboardingPage: React.FC = () => {
 
       {/* Form (Active when not APPROVED or when PENDING_REVIEW) */}
       {status !== 'APPROVED' && status !== 'PENDING_REVIEW' && (
-        <div className="bg-white border border-cream-300 p-8 rounded-2xl shadow-card">
+        <div className="vault-card-static p-8 rounded-3xl">
           <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-cream-200">
             <div className="bg-ink-950 text-white p-2 rounded-xl">
               <FileCheck className="h-5 w-5" />
@@ -335,10 +358,10 @@ export const OnboardingPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-8 py-3.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-crimson flex items-center space-x-2"
+                className="px-8 py-3.5 rounded-xl bg-white border-2 border-black hover:bg-cream-100 text-black font-extrabold text-xs uppercase tracking-wider transition-all shadow-md flex items-center space-x-2 disabled:bg-cream-200 disabled:text-ink-400"
               >
-                <Send className="h-4 w-4" />
-                <span>{isSubmitting ? 'Submitting Application...' : 'Submit for Compliance Review'}</span>
+                <Send className="h-4 w-4 text-black" />
+                <span className="text-black font-extrabold">{isSubmitting ? 'Submitting Application...' : 'Submit for Compliance Review'}</span>
               </button>
             </div>
           </form>

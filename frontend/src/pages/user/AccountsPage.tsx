@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { Account } from '../../types';
 import {
@@ -11,9 +12,11 @@ import {
   ArrowRightLeft,
   RefreshCw,
   Vault,
+  ArrowLeft,
 } from 'lucide-react';
 
 export const AccountsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -82,7 +85,26 @@ export const AccountsPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Top Navigation Bar with Back Button & Main Logo */}
+      <div className="flex items-center justify-between pb-2 border-b border-cream-300">
+        <button
+          type="button"
+          onClick={() => navigate('/dashboard')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Dashboard</span>
+        </button>
+
+        <div className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault</span>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -97,7 +119,7 @@ export const AccountsPage: React.FC = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => fetchAccounts()}
-            className="p-3 rounded-xl bg-white border border-cream-300 text-ink-700 hover:text-crimson-600 shadow-clean transition-colors"
+            className="p-3 rounded-xl bg-white border border-cream-300 text-ink-950 hover:text-white hover:bg-crimson-600 hover:border-crimson-600 shadow-clean transition-all"
             title="Refresh Account Balances"
           >
             <RefreshCw className="h-4 w-4" />
@@ -105,10 +127,10 @@ export const AccountsPage: React.FC = () => {
           <button
             onClick={() => setIsModalOpen(true)}
             disabled={accounts.length === 0}
-            className="px-6 py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-crimson flex items-center space-x-2"
+            className="px-6 py-3 rounded-xl bg-white border-2 border-black hover:bg-cream-100 disabled:bg-cream-200 disabled:text-ink-400 disabled:border disabled:border-cream-300 disabled:cursor-not-allowed text-black font-extrabold text-xs uppercase tracking-wider transition-all shadow-md flex items-center space-x-2"
           >
-            <ArrowRightLeft className="h-4 w-4" />
-            <span>Post Ledger Transfer</span>
+            <ArrowRightLeft className="h-4 w-4 text-black" />
+            <span className="text-black font-extrabold">Post Ledger Transfer</span>
           </button>
         </div>
       </div>
@@ -133,10 +155,10 @@ export const AccountsPage: React.FC = () => {
             return (
               <div
                 key={acc.id}
-                className={`p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between transition-all duration-200 ${
+                className={`p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl ${
                   isDarkCard
-                    ? 'bg-ink-950 text-white shadow-elevated border border-ink-850'
-                    : 'bg-white text-ink-950 shadow-card border border-cream-300'
+                    ? 'bg-ink-950 text-white shadow-elevated border border-ink-850 hover:border-crimson-600/50'
+                    : 'bg-white text-ink-950 shadow-card border border-cream-300 hover:border-crimson-600/40'
                 }`}
               >
                 {/* Micro watermark */}
@@ -296,17 +318,17 @@ export const AccountsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-3 rounded-xl bg-cream-200 hover:bg-cream-300 text-ink-700 text-xs font-bold uppercase tracking-wider transition-colors"
+                  className="px-5 py-3 rounded-xl bg-white hover:bg-cream-100 border border-cream-300 text-ink-950 text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isTransferring}
-                  className="px-7 py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider shadow-crimson flex items-center space-x-2"
+                  className="px-7 py-3 rounded-xl bg-white border-2 border-black hover:bg-cream-100 disabled:bg-cream-200 disabled:text-ink-400 disabled:border disabled:border-cream-300 disabled:cursor-not-allowed text-black text-xs font-extrabold uppercase tracking-wider shadow-md flex items-center space-x-2"
                 >
-                  <Send className="h-3.5 w-3.5" />
-                  <span>{isTransferring ? 'Posting...' : 'Execute Transfer'}</span>
+                  <Send className="h-3.5 w-3.5 text-black" />
+                  <span className="text-black font-extrabold">{isTransferring ? 'Posting...' : 'Execute Transfer'}</span>
                 </button>
               </div>
             </form>

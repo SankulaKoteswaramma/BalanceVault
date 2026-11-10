@@ -10,29 +10,29 @@ import {
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-cream-100 text-ink-900 flex flex-col justify-between selection:bg-crimson-600 selection:text-white">
+    <div className="min-h-screen bg-transparent text-ink-900 flex flex-col justify-between selection:bg-crimson-600 selection:text-white">
       {/* Header */}
-      <header className="border-b border-cream-300 bg-white/80 backdrop-blur-md px-6 md:px-12 py-4 flex items-center justify-between sticky top-0 z-30 shadow-clean">
+      <header className="border-b border-cream-300 bg-white/90 backdrop-blur-md px-6 md:px-12 py-4 flex items-center justify-between sticky top-0 z-30 shadow-clean">
         <div className="flex items-center space-x-3">
-          <div className="bg-ink-950 text-white p-2.5 rounded-xl shadow-clean">
-            <Vault className="h-6 w-6" />
+          <div className="bg-white border-2 border-black text-black p-2 rounded-xl shadow-sm">
+            <Vault className="h-6 w-6 text-black" />
           </div>
           <div className="flex items-center space-x-2">
-            <span className="font-display font-extrabold text-xl text-ink-950 tracking-tight">BalanceVault</span>
+            <span className="font-display font-extrabold text-xl text-black tracking-tight">BalanceVault</span>
             <span className="w-2 h-2 rounded-full bg-crimson-600"></span>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <Link
             to="/login"
-            className="text-xs font-bold uppercase tracking-wider text-ink-700 hover:text-crimson-600 transition-colors px-3 py-2"
+            className="text-xs font-extrabold uppercase tracking-wider text-black hover:text-crimson-600 transition-colors px-4 py-2 rounded-xl border border-black/30 bg-white shadow-sm"
           >
             Sign In
           </Link>
           <Link
             to="/register"
-            className="px-5 py-2.5 rounded-xl bg-ink-950 hover:bg-crimson-600 text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-clean hover:shadow-crimson"
+            className="px-5 py-2 rounded-xl bg-white border-2 border-black hover:bg-cream-100 text-black text-xs font-extrabold uppercase tracking-wider transition-all duration-200 shadow-sm"
           >
             Open Account
           </Link>
@@ -41,10 +41,10 @@ export const LandingPage: React.FC = () => {
 
       {/* Hero Section */}
       <main className="max-w-6xl mx-auto px-6 py-16 md:py-24 text-center flex-1 flex flex-col justify-center items-center">
-        {/* Challenge Badge */}
+        {/* Platform Badge */}
         <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-cream-300 shadow-clean text-xs font-mono font-semibold text-ink-700 mb-8">
           <span className="w-2 h-2 rounded-full bg-crimson-600"></span>
-          <span>SNOVASYS FRESHER HIRING CHALLENGE 2026</span>
+          <span>PROVABLE ENTERPRISE LEDGER</span>
         </div>
 
         {/* Hero Headline */}
@@ -60,28 +60,28 @@ export const LandingPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-20 w-full sm:w-auto">
           <Link
             to="/register"
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-bold text-sm tracking-wide transition-all shadow-crimson flex items-center justify-center space-x-2.5"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white border-2 border-black hover:bg-cream-100 text-black font-extrabold text-sm tracking-wide transition-all shadow-md flex items-center justify-center space-x-2.5"
           >
-            <span>Start KYC Onboarding</span>
-            <ArrowRight className="h-4 w-4" />
+            <span className="text-black font-extrabold">Start KYC Onboarding</span>
+            <ArrowRight className="h-4 w-4 text-black" />
           </Link>
           <Link
             to="/login"
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white hover:bg-cream-200 text-ink-900 border border-cream-300 font-bold text-sm transition-all shadow-clean"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white hover:bg-cream-200 text-black border-2 border-black/80 font-extrabold text-sm transition-all shadow-md flex items-center justify-center space-x-2"
           >
-            Sign In to Dashboard
+            <span className="text-black font-extrabold">Sign In to Dashboard</span>
           </Link>
         </div>
 
         {/* Key Feature Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left max-w-5xl w-full">
           {/* Card 1 */}
-          <div className="bg-white border border-cream-300 p-8 rounded-2xl shadow-card hover:border-crimson-300 transition-all duration-200 group">
-            <div className="bg-cream-100 border border-cream-300 w-12 h-12 rounded-xl flex items-center justify-center text-ink-950 mb-5 group-hover:bg-crimson-50 group-hover:text-crimson-600 transition-colors">
+          <div className="vault-card p-8 rounded-3xl group">
+            <div className="bg-cream-100 border border-cream-300 w-12 h-12 rounded-2xl flex items-center justify-center text-ink-950 mb-5 group-hover:bg-crimson-50 group-hover:text-crimson-600 transition-colors">
               <Scale className="h-6 w-6" />
             </div>
             <h3 className="text-lg font-display font-bold text-ink-950 mb-2">Double-Entry Balancing</h3>
-            <p className="text-ink-500 text-sm leading-relaxed">
+            <p className="text-ink-600 text-sm leading-relaxed">
               Every balance movement creates paired debit and credit entries with strict zero-floor overdraft prevention.
             </p>
             <div className="mt-4 pt-4 border-t border-cream-200 text-xs font-mono text-crimson-700 font-bold">
@@ -90,12 +90,12 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white border border-cream-300 p-8 rounded-2xl shadow-card hover:border-crimson-300 transition-all duration-200 group">
-            <div className="bg-cream-100 border border-cream-300 w-12 h-12 rounded-xl flex items-center justify-center text-ink-950 mb-5 group-hover:bg-crimson-50 group-hover:text-crimson-600 transition-colors">
+          <div className="vault-card p-8 rounded-3xl group">
+            <div className="bg-cream-100 border border-cream-300 w-12 h-12 rounded-2xl flex items-center justify-center text-ink-950 mb-5 group-hover:bg-crimson-50 group-hover:text-crimson-600 transition-colors">
               <History className="h-6 w-6" />
             </div>
             <h3 className="text-lg font-display font-bold text-ink-950 mb-2">Append-Only Audit Trail</h3>
-            <p className="text-ink-500 text-sm leading-relaxed">
+            <p className="text-ink-600 text-sm leading-relaxed">
               PostgreSQL privileges explicitly revoke UPDATE and DELETE commands on audit logs to ensure historical immutability.
             </p>
             <div className="mt-4 pt-4 border-t border-cream-200 text-xs font-mono text-ink-600 font-semibold">
@@ -104,12 +104,12 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white border border-cream-300 p-8 rounded-2xl shadow-card hover:border-crimson-300 transition-all duration-200 group">
-            <div className="bg-cream-100 border border-cream-300 w-12 h-12 rounded-xl flex items-center justify-center text-ink-950 mb-5 group-hover:bg-crimson-50 group-hover:text-crimson-600 transition-colors">
+          <div className="vault-card p-8 rounded-3xl group">
+            <div className="bg-cream-100 border border-cream-300 w-12 h-12 rounded-2xl flex items-center justify-center text-ink-950 mb-5 group-hover:bg-crimson-50 group-hover:text-crimson-600 transition-colors">
               <Lock className="h-6 w-6" />
             </div>
             <h3 className="text-lg font-display font-bold text-ink-950 mb-2">Role Separation & RBAC</h3>
-            <p className="text-ink-500 text-sm leading-relaxed">
+            <p className="text-ink-600 text-sm leading-relaxed">
               Strict isolation between Super Admin, Compliance Officer, and Account Holder with centralized authorization guards.
             </p>
             <div className="mt-4 pt-4 border-t border-cream-200 text-xs font-mono text-crimson-700 font-bold">
@@ -121,7 +121,7 @@ export const LandingPage: React.FC = () => {
 
       {/* Footer */}
       <footer className="border-t border-cream-300 bg-white py-6 px-6 text-center text-xs text-ink-500 font-mono">
-        <p>BalanceVault &bull; Money Movement With a Ledger You Can Prove &bull; Snovasys Challenge 2026</p>
+        <p>BalanceVault &bull; Money Movement With a Ledger You Can Prove</p>
       </footer>
     </div>
   );

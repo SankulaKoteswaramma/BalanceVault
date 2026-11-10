@@ -59,10 +59,10 @@ export const UserDashboard: React.FC = () => {
         {user?.onboardingStatus !== 'APPROVED' && (
           <Link
             to="/onboarding"
-            className="px-6 py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-crimson flex items-center space-x-2 relative"
+            className="px-6 py-3 rounded-xl bg-white border-2 border-black hover:bg-cream-100 text-black font-extrabold text-xs uppercase tracking-wider transition-all shadow-md flex items-center space-x-2 relative"
           >
-            <span>Complete KYC Verification</span>
-            <ArrowUpRight className="h-4 w-4" />
+            <span className="text-black font-extrabold">Complete KYC Verification</span>
+            <ArrowUpRight className="h-4 w-4 text-black" />
           </Link>
         )}
       </div>
@@ -70,7 +70,7 @@ export const UserDashboard: React.FC = () => {
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total Balance Card */}
-        <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+        <div className="vault-card p-6 rounded-2xl">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-ink-500 uppercase tracking-wider font-mono">
               Total Proved Balance
@@ -87,7 +87,7 @@ export const UserDashboard: React.FC = () => {
         </div>
 
         {/* Active Accounts */}
-        <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+        <div className="vault-card p-6 rounded-2xl">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-ink-500 uppercase tracking-wider font-mono">
               Active Ledgers
@@ -104,7 +104,7 @@ export const UserDashboard: React.FC = () => {
         </div>
 
         {/* KYC Compliance Status */}
-        <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+        <div className="vault-card p-6 rounded-2xl">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-ink-500 uppercase tracking-wider font-mono">
               KYC Status
@@ -136,7 +136,7 @@ export const UserDashboard: React.FC = () => {
       </div>
 
       {/* Quick Accounts Table */}
-      <div className="bg-white border border-cream-300 rounded-2xl p-6 shadow-card">
+      <div className="vault-card p-6 rounded-2xl">
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-cream-200">
           <div className="flex items-center space-x-2.5">
             <div className="bg-ink-950 text-white p-2 rounded-xl">

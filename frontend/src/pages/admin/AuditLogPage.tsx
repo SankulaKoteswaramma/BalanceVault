@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { AuditLog } from '../../types';
 import {
   ShieldCheck,
   X,
   Lock,
+  ArrowLeft,
+  Vault,
 } from 'lucide-react';
 
 export const AuditLogPage: React.FC = () => {
+  const navigate = useNavigate();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [actionFilter, setActionFilter] = useState<string>('');
@@ -38,6 +42,25 @@ export const AuditLogPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
+      {/* Top Navigation Bar with Back Button & Main Logo */}
+      <div className="flex items-center justify-between pb-2 border-b border-cream-300">
+        <button
+          type="button"
+          onClick={() => navigate('/admin')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Command Overview</span>
+        </button>
+
+        <div className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault</span>
+        </div>
+      </div>
+
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -57,7 +80,7 @@ export const AuditLogPage: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-cream-300 p-4 rounded-2xl shadow-card flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="vault-card-static p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="w-full md:w-80">
           <input
             type="text"
@@ -83,7 +106,7 @@ export const AuditLogPage: React.FC = () => {
       </div>
 
       {/* Logs Table */}
-      <div className="bg-white border border-cream-300 rounded-2xl shadow-card overflow-hidden">
+      <div className="vault-card-static rounded-2xl overflow-hidden">
         {loading ? (
           <div className="py-24 text-center text-ink-400 font-mono text-xs">Loading audit events...</div>
         ) : logs.length === 0 ? (
@@ -135,7 +158,7 @@ export const AuditLogPage: React.FC = () => {
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => setSelectedLog(log)}
-                        className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-cream-100 border border-cream-300 text-ink-950 font-sans transition-colors shadow-sm"
+                        className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-ink-950 hover:bg-crimson-600 text-white font-sans transition-colors shadow-sm"
                       >
                         Inspect
                       </button>

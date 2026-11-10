@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { OnboardingApplication } from '../../types';
 import {
@@ -6,9 +7,12 @@ import {
   FileCheck2,
   CheckCircle2,
   XCircle,
+  ArrowLeft,
+  Vault,
 } from 'lucide-react';
 
 export const OnboardingManagementPage: React.FC = () => {
+  const navigate = useNavigate();
   const [applications, setApplications] = useState<OnboardingApplication[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [statusFilter, setStatusFilter] = useState<string>('PENDING_REVIEW');
@@ -64,6 +68,25 @@ export const OnboardingManagementPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
+      {/* Top Navigation Bar with Back Button & Main Logo */}
+      <div className="flex items-center justify-between pb-2 border-b border-cream-300">
+        <button
+          type="button"
+          onClick={() => navigate('/admin')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Command Overview</span>
+        </button>
+
+        <div className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault</span>
+        </div>
+      </div>
+
       {/* Title */}
       <div>
         <h1 className="text-2xl md:text-3xl font-display font-extrabold text-ink-950 tracking-tight flex items-center space-x-3">
@@ -76,7 +99,7 @@ export const OnboardingManagementPage: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-cream-300 p-4 rounded-2xl shadow-card flex items-center justify-between">
+      <div className="vault-card-static p-4 rounded-2xl flex items-center justify-between">
         <span className="text-xs font-mono font-bold text-ink-600 uppercase tracking-wider">
           Filter by Status:
         </span>
@@ -93,7 +116,7 @@ export const OnboardingManagementPage: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-cream-300 rounded-2xl shadow-card overflow-hidden">
+      <div className="vault-card-static rounded-2xl overflow-hidden">
         {loading ? (
           <div className="py-24 text-center text-ink-400 font-mono text-xs">Loading applications queue...</div>
         ) : applications.length === 0 ? (
@@ -143,9 +166,9 @@ export const OnboardingManagementPage: React.FC = () => {
                           setReviewDecision('APPROVE');
                           setReviewNotes('Applicant identity and documentation verified.');
                         }}
-                        className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-crimson-600 hover:bg-crimson-700 text-white shadow-crimson transition-colors"
+                        className="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-white border-2 border-black hover:bg-cream-100 text-black shadow-sm transition-colors"
                       >
-                        Inspect & Review
+                        <span className="text-black font-extrabold">Inspect & Review</span>
                       </button>
                     </td>
                   </tr>
@@ -233,10 +256,10 @@ export const OnboardingManagementPage: React.FC = () => {
                       className={`py-3 px-4 rounded-xl text-xs font-bold border transition-all flex items-center justify-center space-x-2 ${
                         reviewDecision === 'APPROVE'
                           ? 'bg-ink-950 text-white border-ink-950 shadow-md'
-                          : 'bg-cream-50 text-ink-600 border-cream-300 hover:bg-cream-100'
+                          : 'bg-white text-ink-950 border-cream-300 hover:bg-cream-100'
                       }`}
                     >
-                      <CheckCircle2 className="h-4 w-4 text-cream-200" />
+                      <CheckCircle2 className={`h-4 w-4 ${reviewDecision === 'APPROVE' ? 'text-white' : 'text-crimson-600'}`} />
                       <span>Approve & Provision</span>
                     </button>
                     <button
@@ -248,7 +271,7 @@ export const OnboardingManagementPage: React.FC = () => {
                       className={`py-3 px-4 rounded-xl text-xs font-bold border transition-all flex items-center justify-center space-x-2 ${
                         reviewDecision === 'REJECT'
                           ? 'bg-crimson-600 text-white border-crimson-700 shadow-crimson'
-                          : 'bg-cream-50 text-ink-600 border-cream-300 hover:bg-cream-100'
+                          : 'bg-white text-ink-950 border-cream-300 hover:bg-cream-100'
                       }`}
                     >
                       <XCircle className="h-4 w-4" />
@@ -274,7 +297,7 @@ export const OnboardingManagementPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedApp(null)}
-                    className="px-4 py-2.5 text-xs font-bold rounded-xl bg-cream-200 text-ink-700 hover:bg-cream-300 transition-colors"
+                    className="px-4 py-2.5 text-xs font-bold rounded-xl bg-white text-ink-950 border border-cream-300 hover:bg-cream-100 transition-colors shadow-sm"
                   >
                     Cancel
                   </button>
@@ -282,9 +305,9 @@ export const OnboardingManagementPage: React.FC = () => {
                     type="button"
                     disabled={isReviewing || !reviewNotes}
                     onClick={handleReview}
-                    className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white shadow-crimson transition-all"
+                    className="px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider rounded-xl bg-white border-2 border-black hover:bg-cream-100 disabled:bg-cream-200 disabled:text-ink-400 disabled:border-cream-300 text-black shadow-md transition-all"
                   >
-                    {isReviewing ? 'Saving Review...' : 'Commit Decision'}
+                    <span className="text-black font-extrabold">{isReviewing ? 'Saving Review...' : 'Commit Decision'}</span>
                   </button>
                 </div>
               </div>

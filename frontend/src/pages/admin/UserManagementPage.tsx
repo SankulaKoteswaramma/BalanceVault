@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { User, Role, UserStatus } from '../../types';
 import {
   Search,
   X,
+  ArrowLeft,
+  Vault,
 } from 'lucide-react';
 
 export const UserManagementPage: React.FC = () => {
+  const navigate = useNavigate();
   const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -95,6 +99,25 @@ export const UserManagementPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
+      {/* Top Navigation Bar with Back Button & Main Logo */}
+      <div className="flex items-center justify-between pb-2 border-b border-cream-300">
+        <button
+          type="button"
+          onClick={() => navigate('/admin')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Command Overview</span>
+        </button>
+
+        <div className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault</span>
+        </div>
+      </div>
+
       {/* Title */}
       <div>
         <h1 className="text-2xl md:text-3xl font-display font-extrabold text-ink-950 tracking-tight">
@@ -106,7 +129,7 @@ export const UserManagementPage: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-cream-300 p-4 rounded-2xl shadow-card flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="vault-card-static p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:w-80">
           <Search className="h-4 w-4 text-ink-400 absolute left-3.5 top-3" />
           <input
@@ -144,7 +167,7 @@ export const UserManagementPage: React.FC = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white border border-cream-300 rounded-2xl shadow-card overflow-hidden">
+      <div className="vault-card-static rounded-2xl overflow-hidden">
         {loading ? (
           <div className="py-24 text-center text-ink-400 font-mono text-xs">Loading directory records...</div>
         ) : users.length === 0 ? (
@@ -200,7 +223,11 @@ export const UserManagementPage: React.FC = () => {
                           setSelectedStatus(u.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE');
                           setModalAction('STATUS');
                         }}
-                        className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-cream-100 border border-cream-300 text-ink-950 transition-colors"
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm ${
+                          u.status === 'ACTIVE'
+                            ? 'bg-crimson-50 text-crimson-800 border border-crimson-200 hover:bg-crimson-600 hover:text-white'
+                            : 'bg-ink-950 text-white hover:bg-crimson-600'
+                        }`}
                       >
                         {u.status === 'ACTIVE' ? 'Suspend' : 'Activate'}
                       </button>
@@ -212,7 +239,7 @@ export const UserManagementPage: React.FC = () => {
                             setSelectedRole(u.role === 'ADMIN' ? 'ACCOUNT_HOLDER' : 'ADMIN');
                             setModalAction('ROLE');
                           }}
-                          className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-crimson-50 hover:bg-crimson-100 border border-crimson-200 text-crimson-800 transition-colors"
+                          className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-cream-100 hover:bg-ink-950 hover:text-white border border-cream-300 text-ink-950 transition-all shadow-sm"
                         >
                           Modify Role
                         </button>
@@ -306,7 +333,7 @@ export const UserManagementPage: React.FC = () => {
                     setModalUser(null);
                     setModalAction(null);
                   }}
-                  className="px-4 py-2.5 text-xs font-bold rounded-xl bg-cream-200 text-ink-700 hover:bg-cream-300"
+                  className="px-4 py-2.5 text-xs font-bold rounded-xl bg-white text-ink-950 border border-cream-300 hover:bg-cream-100 transition-colors shadow-sm"
                 >
                   Cancel
                 </button>
@@ -314,9 +341,9 @@ export const UserManagementPage: React.FC = () => {
                   type="button"
                   disabled={isUpdating || !reason}
                   onClick={modalAction === 'STATUS' ? handleUpdateStatus : handleUpdateRole}
-                  className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white shadow-crimson"
+                  className="px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider rounded-xl bg-white border-2 border-black hover:bg-cream-100 disabled:bg-cream-200 disabled:text-ink-400 disabled:border-cream-300 text-black shadow-md transition-all"
                 >
-                  {isUpdating ? 'Saving...' : 'Commit Change'}
+                  <span className="text-black font-extrabold">{isUpdating ? 'Saving...' : 'Commit Change'}</span>
                 </button>
               </div>
             </div>

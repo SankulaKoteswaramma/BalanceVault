@@ -1,7 +1,14 @@
 import dotenv from 'dotenv';
+import path from 'path';
 import { z } from 'zod';
 
+// Load .env from cwd, backend root, or repository root
 dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+const fallbackNeonDb =
+  'postgresql://neondb_owner:npg_oYBzu5sdZA3G@ep-muddy-tooth-besapw0o-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -9,7 +16,7 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().default('http://localhost:5173'),
   
   // Database Configuration
-  DATABASE_URL: z.string().default('postgresql://postgres:postgres@localhost:5432/balancevault?schema=public'),
+  DATABASE_URL: z.string().default(fallbackNeonDb),
   
   // Redis Configuration
   REDIS_URL: z.string().default('redis://localhost:6379'),

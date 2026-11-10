@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import {
   Users,
@@ -8,6 +8,8 @@ import {
   AlertTriangle,
   Activity,
   ArrowRight,
+  ArrowLeft,
+  Vault,
 } from 'lucide-react';
 
 interface MetricsData {
@@ -29,6 +31,7 @@ interface MetricsData {
 }
 
 export const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<MetricsData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -50,7 +53,26 @@ export const AdminDashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Top Navigation Bar with Back Button & Main Logo */}
+      <div className="flex items-center justify-between pb-2 border-b border-cream-300">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Landing Page</span>
+        </button>
+
+        <div className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault Admin</span>
+        </div>
+      </div>
+
       {/* Title */}
       <div>
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white border border-cream-300 text-xs font-mono font-semibold text-ink-700 mb-3 shadow-clean">
@@ -71,7 +93,7 @@ export const AdminDashboard: React.FC = () => {
         <>
           {/* Metrics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+            <div className="vault-card p-6 rounded-2xl">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-ink-500 uppercase tracking-wider font-mono">
                   Registered Users
@@ -84,7 +106,7 @@ export const AdminDashboard: React.FC = () => {
               </Link>
             </div>
 
-            <div className="bg-white border-2 border-crimson-200 p-6 rounded-2xl shadow-card bg-gradient-to-br from-white to-crimson-50/20">
+            <div className="vault-card p-6 rounded-2xl border-2 border-crimson-300 bg-white">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-crimson-800 uppercase tracking-wider font-mono">
                   Pending Review
@@ -99,7 +121,7 @@ export const AdminDashboard: React.FC = () => {
               </Link>
             </div>
 
-            <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+            <div className="vault-card p-6 rounded-2xl">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-ink-500 uppercase tracking-wider font-mono">
                   Active Accounts
@@ -114,7 +136,7 @@ export const AdminDashboard: React.FC = () => {
               </Link>
             </div>
 
-            <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
+            <div className="vault-card p-6 rounded-2xl">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-ink-500 uppercase tracking-wider font-mono">
                   Suspended Accounts
@@ -129,7 +151,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Recent Audits Table */}
-          <div className="bg-white border border-cream-300 rounded-2xl p-6 shadow-card">
+          <div className="vault-card p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-cream-200">
               <div className="flex items-center space-x-2.5">
                 <div className="bg-ink-950 text-white p-2 rounded-xl">

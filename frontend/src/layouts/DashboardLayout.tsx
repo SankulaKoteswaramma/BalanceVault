@@ -11,6 +11,7 @@ import {
   LogOut,
   User,
   Shield,
+  ArrowLeft,
 } from 'lucide-react';
 
 export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -36,21 +37,21 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
   const currentNav = isAdmin ? adminNavItems : userNavItems;
 
   return (
-    <div className="min-h-screen bg-cream-100 text-ink-900 flex">
+    <div className="min-h-screen bg-transparent text-ink-900 flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-cream-200/80 border-r border-cream-300 flex flex-col justify-between p-5 hidden md:flex backdrop-blur-md">
+      <aside className="w-64 bg-cream-50/95 border-r border-cream-300 flex flex-col justify-between p-5 hidden md:flex backdrop-blur-md shadow-clean">
         <div>
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 px-2 py-3 mb-8 group">
-            <div className="bg-ink-950 text-white p-2.5 rounded-xl shadow-clean group-hover:bg-crimson-600 transition-colors duration-200">
-              <Vault className="h-5 w-5" />
+            <div className="bg-white border-2 border-black text-black p-2 rounded-xl shadow-sm group-hover:bg-cream-100 transition-colors duration-200">
+              <Vault className="h-5 w-5 text-black" />
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <span className="font-display font-bold text-lg text-ink-950 tracking-tight">BalanceVault</span>
+                <span className="font-display font-extrabold text-lg text-black tracking-tight">BalanceVault</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-crimson-600"></span>
               </div>
-              <span className="block text-[10px] text-ink-400 font-mono tracking-wider uppercase font-semibold">
+              <span className="block text-[10px] text-ink-600 font-mono tracking-wider uppercase font-extrabold">
                 PROVABLE LEDGER
               </span>
             </div>
@@ -108,7 +109,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
           <button
             onClick={() => logout()}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2 text-xs font-bold text-ink-700 hover:text-white hover:bg-crimson-600 rounded-xl transition-all duration-150 border border-cream-300 hover:border-crimson-600"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 text-xs font-bold text-ink-950 bg-white hover:text-white hover:bg-crimson-600 rounded-xl transition-all duration-150 border border-cream-300 hover:border-crimson-600 shadow-sm"
           >
             <LogOut className="h-3.5 w-3.5" />
             <span>Sign Out</span>
@@ -119,8 +120,27 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Top Navbar */}
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-cream-300 px-6 md:px-8 flex items-center justify-between sticky top-0 z-20 shadow-clean">
+        <header className="h-16 bg-white/90 backdrop-blur-md border-b border-cream-300 px-4 md:px-8 flex items-center justify-between sticky top-0 z-20 shadow-clean">
           <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              onClick={() => window.history.back()}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-cream-50 hover:bg-cream-100 text-ink-950 border border-cream-300 transition-colors shadow-sm"
+              title="Go back to previous page"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 text-crimson-600" />
+              <span>Back</span>
+            </button>
+
+            <Link to="/" className="flex items-center space-x-2 mr-1 group">
+              <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+                <Vault className="h-4 w-4 text-black" />
+              </div>
+              <span className="font-display font-extrabold text-sm text-black tracking-tight hidden sm:inline">
+                BalanceVault
+              </span>
+            </Link>
+
             <span className="inline-flex items-center space-x-1.5 text-xs px-3 py-1 rounded-full bg-cream-200 text-ink-800 font-medium border border-cream-300">
               <Shield className="h-3.5 w-3.5 text-crimson-600" />
               <span>Scope: <strong className="text-ink-950">{isAdmin ? 'Compliance & Administrative' : 'Customer Account'}</strong></span>

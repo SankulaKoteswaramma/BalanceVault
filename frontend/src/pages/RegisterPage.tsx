@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Vault, AlertCircle, ArrowRight } from 'lucide-react';
+import { Vault, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const registerFormSchema = z
   .object({
@@ -63,12 +63,30 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cream-100 text-ink-900 flex items-center justify-center p-6 selection:bg-crimson-600 selection:text-white">
-      <div className="max-w-md w-full bg-white border border-cream-300 p-8 sm:p-10 rounded-2xl shadow-elevated">
+    <div className="min-h-screen bg-transparent text-ink-900 flex flex-col items-center justify-center p-6 selection:bg-crimson-600 selection:text-white">
+      <div className="max-w-md w-full mb-4 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => navigate('/login')}
+          className="inline-flex items-center space-x-2 text-xs font-bold text-ink-950 hover:text-crimson-600 px-3.5 py-2 rounded-xl bg-white border border-cream-300 shadow-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-crimson-600" />
+          <span>Back to Sign In</span>
+        </button>
+
+        <Link to="/" className="flex items-center space-x-2">
+          <div className="bg-white border-2 border-black text-black p-1.5 rounded-lg shadow-sm">
+            <Vault className="h-4 w-4 text-black" />
+          </div>
+          <span className="font-display font-extrabold text-sm text-black tracking-tight">BalanceVault</span>
+        </Link>
+      </div>
+
+      <div className="max-w-md w-full bg-white border border-cream-300/90 p-8 sm:p-10 rounded-3xl shadow-elevated hover:shadow-2xl hover:border-crimson-600/30 transition-all duration-300">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-8">
-          <Link to="/" className="bg-ink-950 text-white p-3 rounded-2xl shadow-clean mb-4 hover:bg-crimson-600 transition-colors">
-            <Vault className="h-7 w-7" />
+          <Link to="/" className="bg-white border-2 border-black text-black p-3.5 rounded-2xl shadow-sm mb-4 hover:bg-cream-100 transition-colors">
+            <Vault className="h-8 w-8 text-black" />
           </Link>
           <div className="flex items-center space-x-1.5 mb-1">
             <h2 className="text-2xl font-display font-extrabold text-ink-950 tracking-tight">Create Customer Account</h2>
@@ -163,10 +181,10 @@ export const RegisterPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full mt-3 py-3.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white font-bold text-sm tracking-wide transition-all shadow-crimson flex items-center justify-center space-x-2"
+            className="w-full mt-3 py-3.5 rounded-xl bg-white border-2 border-black hover:bg-cream-100 text-black font-extrabold text-sm tracking-wide transition-all shadow-md flex items-center justify-center space-x-2 disabled:bg-cream-200 disabled:text-ink-400"
           >
-            <span>{isSubmitting ? 'Registering...' : 'Complete Registration'}</span>
-            {!isSubmitting && <ArrowRight className="h-4 w-4" />}
+            <span className="text-black font-extrabold">{isSubmitting ? 'Registering...' : 'Complete Registration'}</span>
+            {!isSubmitting && <ArrowRight className="h-4 w-4 text-black" />}
           </button>
         </form>
 
