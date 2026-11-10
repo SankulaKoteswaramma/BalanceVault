@@ -81,8 +81,8 @@ export const OnboardingPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+      <div className="flex items-center justify-center py-24">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-crimson-600"></div>
       </div>
     );
   }
@@ -93,59 +93,59 @@ export const OnboardingPage: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Title */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-          Account Verification & KYC Onboarding
+        <h1 className="text-2xl md:text-3xl font-display font-extrabold text-ink-950 tracking-tight">
+          KYC & Identity Verification Dossier
         </h1>
-        <p className="text-slate-400 text-sm mt-1">
-          Regulatory identity verification for provisioned financial accounts.
+        <p className="text-ink-600 text-sm mt-1">
+          Regulatory compliance onboarding required to provision and unlock account ledgers.
         </p>
       </div>
 
-      {/* State Progress Bar */}
-      <div className="bg-slate-950 border border-slate-800/80 p-6 rounded-2xl">
+      {/* State Progress Bar (White/Cream/Black/Red) */}
+      <div className="bg-white border border-cream-300 p-6 rounded-2xl shadow-card">
         <div className="flex items-center justify-between max-w-2xl mx-auto">
           {/* Step 1 */}
           <div className="flex flex-col items-center">
-            <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-indigo-500/25">
+            <div className="w-10 h-10 rounded-full bg-ink-950 text-white flex items-center justify-center font-bold text-xs shadow-clean">
               1
             </div>
-            <span className="text-xs font-semibold text-slate-200 mt-2">Registered</span>
+            <span className="text-xs font-bold text-ink-950 mt-2 font-mono">Registered</span>
           </div>
 
-          <div className={`h-1 flex-1 mx-2 rounded ${status !== 'REGISTERED' ? 'bg-indigo-600' : 'bg-slate-800'}`}></div>
+          <div className={`h-1 flex-1 mx-3 rounded ${status !== 'REGISTERED' ? 'bg-crimson-600' : 'bg-cream-300'}`}></div>
 
           {/* Step 2 */}
           <div className="flex flex-col items-center">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${
                 status === 'PENDING_REVIEW'
-                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20'
+                  ? 'bg-crimson-600 text-white shadow-crimson animate-pulse'
                   : status === 'APPROVED' || status === 'REJECTED'
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-800 text-slate-400'
+                  ? 'bg-ink-950 text-white'
+                  : 'bg-cream-200 text-ink-500 border border-cream-300'
               }`}
             >
               2
             </div>
-            <span className="text-xs font-semibold text-slate-200 mt-2">Review</span>
+            <span className="text-xs font-bold text-ink-950 mt-2 font-mono">In Review</span>
           </div>
 
-          <div className={`h-1 flex-1 mx-2 rounded ${status === 'APPROVED' ? 'bg-emerald-500' : 'bg-slate-800'}`}></div>
+          <div className={`h-1 flex-1 mx-3 rounded ${status === 'APPROVED' ? 'bg-crimson-600' : 'bg-cream-300'}`}></div>
 
           {/* Step 3 */}
           <div className="flex flex-col items-center">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${
                 status === 'APPROVED'
-                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
+                  ? 'bg-crimson-600 text-white shadow-crimson'
                   : status === 'REJECTED'
-                  ? 'bg-rose-500 text-white'
-                  : 'bg-slate-800 text-slate-400'
+                  ? 'bg-crimson-700 text-white'
+                  : 'bg-cream-200 text-ink-500 border border-cream-300'
               }`}
             >
               3
             </div>
-            <span className="text-xs font-semibold text-slate-200 mt-2">
+            <span className="text-xs font-bold text-ink-950 mt-2 font-mono">
               {status === 'REJECTED' ? 'Rejected' : 'Approved'}
             </span>
           </div>
@@ -154,23 +154,27 @@ export const OnboardingPage: React.FC = () => {
 
       {/* Status Notifications */}
       {status === 'APPROVED' && (
-        <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-start space-x-4">
-          <CheckCircle2 className="h-6 w-6 text-emerald-400 flex-shrink-0 mt-0.5" />
+        <div className="p-6 rounded-2xl bg-white border-2 border-crimson-600/30 shadow-card flex items-start space-x-4">
+          <div className="bg-crimson-50 text-crimson-600 p-2.5 rounded-xl">
+            <CheckCircle2 className="h-6 w-6" />
+          </div>
           <div>
-            <h3 className="text-base font-bold text-emerald-400">Onboarding Approved</h3>
-            <p className="text-sm text-slate-300 mt-1">
-              Your identity has been verified by compliance. Your primary checking account is active and enabled for ledger operations.
+            <h3 className="text-base font-display font-bold text-ink-950">Verification Approved by Compliance</h3>
+            <p className="text-sm text-ink-600 mt-1">
+              Your customer identity has been reviewed and verified. Your operational checking account is active and enabled for double-entry ledger transfers.
             </p>
           </div>
         </div>
       )}
 
       {status === 'PENDING_REVIEW' && (
-        <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start space-x-4">
-          <Clock className="h-6 w-6 text-amber-400 flex-shrink-0 mt-0.5" />
+        <div className="p-6 rounded-2xl bg-white border border-cream-300 shadow-card flex items-start space-x-4">
+          <div className="bg-cream-100 text-crimson-600 p-2.5 rounded-xl border border-cream-300">
+            <Clock className="h-6 w-6" />
+          </div>
           <div>
-            <h3 className="text-base font-bold text-amber-400">Application Under Review</h3>
-            <p className="text-sm text-slate-300 mt-1">
+            <h3 className="text-base font-display font-bold text-ink-950">Application Pending Compliance Review</h3>
+            <p className="text-sm text-ink-600 mt-1">
               Your onboarding documentation has been securely transmitted. A compliance administrator is reviewing your record.
             </p>
           </div>
@@ -178,104 +182,109 @@ export const OnboardingPage: React.FC = () => {
       )}
 
       {status === 'REJECTED' && (
-        <div className="p-6 rounded-2xl bg-rose-500/10 border border-rose-500/20 space-y-2">
-          <div className="flex items-center space-x-3 text-rose-400">
+        <div className="p-6 rounded-2xl bg-white border-2 border-crimson-600/40 shadow-card space-y-3">
+          <div className="flex items-center space-x-3 text-crimson-600">
             <AlertCircle className="h-6 w-6 flex-shrink-0" />
-            <h3 className="text-base font-bold">Onboarding Application Rejected</h3>
+            <h3 className="text-base font-display font-bold text-ink-950">KYC Application Rejected</h3>
           </div>
-          <div className="bg-slate-900 p-4 rounded-xl border border-rose-500/20 text-sm text-slate-300">
-            <span className="text-xs font-semibold uppercase tracking-wider text-rose-400 block mb-1">
-              Compliance Reviewer Notes:
+          <div className="bg-crimson-50/60 p-4 rounded-xl border border-crimson-200 text-xs text-ink-800">
+            <span className="font-mono font-bold text-crimson-800 uppercase tracking-wider block mb-1">
+              Compliance Reviewer Justification:
             </span>
-            {app?.reviewNotes || 'Verification could not be approved based on the information provided.'}
+            {app?.reviewNotes || 'Verification could not be confirmed with the provided documentation.'}
           </div>
-          <p className="text-xs text-slate-400">
-            You may correct and resubmit your verification details using the form below.
+          <p className="text-xs text-ink-600">
+            Please correct your documentation using the form below and resubmit.
           </p>
         </div>
       )}
 
       {/* Form (Active when not APPROVED or when PENDING_REVIEW) */}
       {status !== 'APPROVED' && status !== 'PENDING_REVIEW' && (
-        <div className="bg-slate-950 border border-slate-800/80 p-8 rounded-2xl">
-          <div className="flex items-center space-x-3 mb-6">
-            <FileCheck className="h-6 w-6 text-indigo-400" />
-            <h2 className="text-lg font-bold text-white">Identity & Financial Profile Form</h2>
+        <div className="bg-white border border-cream-300 p-8 rounded-2xl shadow-card">
+          <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-cream-200">
+            <div className="bg-ink-950 text-white p-2 rounded-xl">
+              <FileCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-display font-bold text-ink-950">Identity & Source of Funds Form</h2>
+              <p className="text-xs text-ink-500">All submissions are cryptographically audited and recorded</p>
+            </div>
           </div>
 
           {serverError && (
-            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm">
+            <div className="mb-6 p-4 rounded-xl bg-crimson-50 border border-crimson-200 text-crimson-800 text-xs font-medium">
               {serverError}
             </div>
           )}
 
           {successMsg && (
-            <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
+            <div className="mb-6 p-4 rounded-xl bg-cream-100 border border-cream-300 text-ink-900 text-xs font-medium">
               {successMsg}
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Legal Full Name
                 </label>
                 <input
                   {...register('fullName')}
                   type="text"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 placeholder-ink-400 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 />
-                {errors.fullName && <p className="text-rose-400 text-xs mt-1">{errors.fullName.message}</p>}
+                {errors.fullName && <p className="text-crimson-600 text-xs mt-1">{errors.fullName.message}</p>}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Date of Birth (YYYY-MM-DD)
                 </label>
                 <input
                   {...register('dateOfBirth')}
                   type="date"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600 font-mono"
                 />
-                {errors.dateOfBirth && <p className="text-rose-400 text-xs mt-1">{errors.dateOfBirth.message}</p>}
+                {errors.dateOfBirth && <p className="text-crimson-600 text-xs mt-1">{errors.dateOfBirth.message}</p>}
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Residential Street Address
                 </label>
                 <input
                   {...register('address')}
                   type="text"
                   placeholder="123 Financial Way, Suite 400"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 placeholder-ink-400 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 />
-                {errors.address && <p className="text-rose-400 text-xs mt-1">{errors.address.message}</p>}
+                {errors.address && <p className="text-crimson-600 text-xs mt-1">{errors.address.message}</p>}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                  National ID / SSN Number (Stored Masked)
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
+                  National ID / SSN Number (Masked Upon Storage)
                 </label>
                 <input
                   {...register('nationalIdNumber')}
                   type="password"
                   placeholder="XXX-XX-1234"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600 font-mono"
                 />
                 {errors.nationalIdNumber && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.nationalIdNumber.message}</p>
+                  <p className="text-crimson-600 text-xs mt-1">{errors.nationalIdNumber.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Employment Status
                 </label>
                 <select
                   {...register('employmentStatus')}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 >
                   <option value="EMPLOYED">Employed</option>
                   <option value="SELF_EMPLOYED">Self-Employed</option>
@@ -284,17 +293,17 @@ export const OnboardingPage: React.FC = () => {
                   <option value="UNEMPLOYED">Unemployed</option>
                 </select>
                 {errors.employmentStatus && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.employmentStatus.message}</p>
+                  <p className="text-crimson-600 text-xs mt-1">{errors.employmentStatus.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Annual Income Range
                 </label>
                 <select
                   {...register('annualIncome')}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 >
                   <option value="$0 - $25,000">$0 - $25,000</option>
                   <option value="$25,000 - $75,000">$25,000 - $75,000</option>
@@ -302,31 +311,31 @@ export const OnboardingPage: React.FC = () => {
                   <option value="$150,000+">$150,000+</option>
                 </select>
                 {errors.annualIncome && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.annualIncome.message}</p>
+                  <p className="text-crimson-600 text-xs mt-1">{errors.annualIncome.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Primary Source of Funds
                 </label>
                 <input
                   {...register('sourceOfFunds')}
                   type="text"
-                  placeholder="e.g. Salary, Business Revenue, Savings"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  placeholder="e.g. Salary, Consulting Revenue"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 placeholder-ink-400 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 />
                 {errors.sourceOfFunds && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.sourceOfFunds.message}</p>
+                  <p className="text-crimson-600 text-xs mt-1">{errors.sourceOfFunds.message}</p>
                 )}
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex justify-end">
+            <div className="pt-4 border-t border-cream-200 flex justify-end">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-500/25 flex items-center space-x-2"
+                className="px-8 py-3.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-crimson flex items-center space-x-2"
               >
                 <Send className="h-4 w-4" />
                 <span>{isSubmitting ? 'Submitting Application...' : 'Submit for Compliance Review'}</span>

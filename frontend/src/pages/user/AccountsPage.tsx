@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   ArrowRightLeft,
   RefreshCw,
+  Vault,
 } from 'lucide-react';
 
 export const AccountsPage: React.FC = () => {
@@ -52,7 +53,6 @@ export const AccountsPage: React.FC = () => {
       setTransferError(null);
       setTransferSuccess(null);
 
-      // Generate client-side idempotency key for financial safety
       const idempotencyKey = `idem_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
       const res = await api.post('/accounts/transfer', {
@@ -86,18 +86,18 @@ export const AccountsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-            Accounts & Financial Ledgers
+          <h1 className="text-2xl md:text-3xl font-display font-extrabold text-ink-950 tracking-tight">
+            Accounts & Provable Ledger
           </h1>
-          <p className="text-slate-400 text-sm mt-1">
-            Provable double-entry balanced accounts protected against overdrafts.
+          <p className="text-ink-600 text-sm mt-1">
+            Bank-grade accounts backed by double-entry records and zero-floor balance checking.
           </p>
         </div>
 
         <div className="flex items-center space-x-3">
           <button
             onClick={() => fetchAccounts()}
-            className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-colors"
+            className="p-3 rounded-xl bg-white border border-cream-300 text-ink-700 hover:text-crimson-600 shadow-clean transition-colors"
             title="Refresh Account Balances"
           >
             <RefreshCw className="h-4 w-4" />
@@ -105,117 +105,141 @@ export const AccountsPage: React.FC = () => {
           <button
             onClick={() => setIsModalOpen(true)}
             disabled={accounts.length === 0}
-            className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-500/25 flex items-center space-x-2"
+            className="px-6 py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-crimson flex items-center space-x-2"
           >
             <ArrowRightLeft className="h-4 w-4" />
-            <span>Move Money</span>
+            <span>Post Ledger Transfer</span>
           </button>
         </div>
       </div>
 
-      {/* Account Cards */}
+      {/* Account Cards Styled Like Luxury Physical Cards */}
       {loading ? (
-        <div className="py-20 text-center text-slate-500 text-sm">Loading ledger balances...</div>
+        <div className="py-24 text-center text-ink-400 font-mono text-xs">Loading ledger balances...</div>
       ) : accounts.length === 0 ? (
-        <div className="bg-slate-950 border border-dashed border-slate-800 rounded-2xl p-12 text-center">
-          <CreditCard className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-slate-300">No active accounts provisioned</h3>
-          <p className="text-slate-500 text-sm mt-1 max-w-md mx-auto">
-            Accounts are provisioned automatically as soon as your onboarding identity verification is reviewed and approved by compliance.
+        <div className="bg-white border-2 border-dashed border-cream-300 rounded-2xl p-12 text-center shadow-card">
+          <div className="bg-cream-100 w-16 h-16 rounded-2xl flex items-center justify-center text-ink-400 mx-auto mb-4">
+            <CreditCard className="h-8 w-8" />
+          </div>
+          <h3 className="text-lg font-display font-bold text-ink-950">No active accounts provisioned</h3>
+          <p className="text-ink-500 text-sm mt-1 max-w-md mx-auto">
+            Accounts are provisioned automatically as soon as your identity dossier is verified by compliance.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {accounts.map((acc) => (
-            <div
-              key={acc.id}
-              className="bg-slate-950 border border-slate-800/80 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
-                    {acc.accountType} Account
-                  </span>
-                  <p className="font-mono text-lg font-bold text-slate-100 tracking-wider mt-1">
-                    {acc.accountNumber}
-                  </p>
-                  <span className="text-[11px] text-slate-500 font-mono">UUID: {acc.id}</span>
+          {accounts.map((acc, index) => {
+            const isDarkCard = index % 2 === 0;
+            return (
+              <div
+                key={acc.id}
+                className={`p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between transition-all duration-200 ${
+                  isDarkCard
+                    ? 'bg-ink-950 text-white shadow-elevated border border-ink-850'
+                    : 'bg-white text-ink-950 shadow-card border border-cream-300'
+                }`}
+              >
+                {/* Micro watermark */}
+                <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                  <Vault className="h-28 w-28" />
                 </div>
 
-                <span
-                  className={`text-xs px-2.5 py-1 rounded-full font-bold border ${
-                    acc.status === 'ACTIVE'
-                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                      : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                  }`}
-                >
-                  {acc.status}
-                </span>
-              </div>
-
-              <div className="pt-6 border-t border-slate-800/60 flex items-end justify-between">
                 <div>
-                  <span className="text-[11px] text-slate-400 uppercase tracking-wider block">
-                    Available Balance
+                  <div className="flex items-start justify-between mb-8">
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-xs font-bold uppercase tracking-widest font-mono ${isDarkCard ? 'text-cream-400' : 'text-ink-500'}`}>
+                          {acc.accountType} LEDGER
+                        </span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-crimson-600"></span>
+                      </div>
+                      <p className={`font-mono text-xl font-bold tracking-widest mt-2 ${isDarkCard ? 'text-white' : 'text-ink-950'}`}>
+                        {acc.accountNumber}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`text-[10px] px-3 py-1 rounded-full font-mono font-bold uppercase tracking-wider border ${
+                        acc.status === 'ACTIVE'
+                          ? isDarkCard
+                            ? 'bg-crimson-600/30 text-crimson-400 border-crimson-500/40'
+                            : 'bg-cream-100 text-ink-900 border-cream-300'
+                          : 'bg-crimson-600 text-white border-crimson-700'
+                      }`}
+                    >
+                      {acc.status}
+                    </span>
+                  </div>
+
+                  <span className={`text-[10px] font-mono block ${isDarkCard ? 'text-ink-400' : 'text-ink-400'}`}>
+                    UUID: {acc.id}
                   </span>
-                  <p className="text-3xl font-extrabold text-white mt-0.5">
-                    ${Number(acc.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </p>
                 </div>
-                <div className="flex items-center space-x-1 text-emerald-400 text-xs font-medium">
-                  <ShieldCheck className="h-4 w-4" />
-                  <span>Balanced</span>
+
+                <div className={`pt-8 mt-8 border-t flex items-end justify-between ${isDarkCard ? 'border-ink-800' : 'border-cream-200'}`}>
+                  <div>
+                    <span className={`text-[10px] font-mono uppercase tracking-widest block font-bold ${isDarkCard ? 'text-ink-400' : 'text-ink-500'}`}>
+                      Available Balance
+                    </span>
+                    <p className={`text-3xl font-display font-extrabold mt-0.5 tracking-tight ${isDarkCard ? 'text-white' : 'text-ink-950'}`}>
+                      ${Number(acc.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                  <div className={`flex items-center space-x-1.5 text-xs font-medium ${isDarkCard ? 'text-cream-300' : 'text-crimson-700 font-bold'}`}>
+                    <ShieldCheck className="h-4 w-4 text-crimson-600" />
+                    <span className="font-mono text-[11px] uppercase tracking-wider">Zero Overdraft</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {/* Transfer Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-cream-300 rounded-3xl max-w-lg w-full p-8 shadow-elevated relative animate-in fade-in duration-150">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white"
+              className="absolute top-6 right-6 text-ink-400 hover:text-ink-950 transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-indigo-600 p-2.5 rounded-xl text-white">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-cream-200">
+              <div className="bg-crimson-600 text-white p-2.5 rounded-xl shadow-crimson">
                 <ArrowRightLeft className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Post Balanced Ledger Transfer</h3>
-                <p className="text-xs text-slate-400">Atomic, double-entry transfer with idempotency protection</p>
+                <h3 className="text-xl font-display font-bold text-ink-950">Post Balanced Ledger Transfer</h3>
+                <p className="text-xs text-ink-500">Atomic, double-entry transfer with idempotency protection</p>
               </div>
             </div>
 
             {transferError && (
-              <div className="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center space-x-2">
-                <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              <div className="mb-5 p-4 rounded-xl bg-crimson-50 border border-crimson-200 text-crimson-800 text-xs flex items-center space-x-2 font-medium">
+                <AlertCircle className="h-4 w-4 text-crimson-600 flex-shrink-0" />
                 <span>{transferError}</span>
               </div>
             )}
 
             {transferSuccess && (
-              <div className="mb-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center space-x-2">
-                <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+              <div className="mb-5 p-4 rounded-xl bg-cream-100 border border-cream-300 text-ink-950 text-xs flex items-center space-x-2 font-bold">
+                <CheckCircle2 className="h-4 w-4 text-crimson-600 flex-shrink-0" />
                 <span>{transferSuccess}</span>
               </div>
             )}
 
             <form onSubmit={handleTransfer} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Source Account
                 </label>
                 <select
                   value={selectedSource}
                   onChange={(e) => setSelectedSource(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-ink-950 font-mono focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 >
                   {accounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -226,7 +250,7 @@ export const AccountsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
                   Destination Account ID (UUID)
                 </label>
                 <input
@@ -235,13 +259,13 @@ export const AccountsPage: React.FC = () => {
                   placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
                   value={destinationId}
                   onChange={(e) => setDestinationId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-ink-950 font-mono focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Amount ($ USD)
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
+                  Transfer Amount ($ USD)
                 </label>
                 <input
                   type="number"
@@ -251,35 +275,35 @@ export const AccountsPage: React.FC = () => {
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-ink-950 font-mono focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Description / Memo
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
+                  Memo / Purpose
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Invoice payment, Settlement"
+                  placeholder="e.g. Settlement, Liquidity Movement"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-ink-950 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
                 />
               </div>
 
-              <div className="pt-4 border-t border-slate-800 flex justify-end space-x-3">
+              <div className="pt-4 border-t border-cream-200 flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+                  className="px-5 py-3 rounded-xl bg-cream-200 hover:bg-cream-300 text-ink-700 text-xs font-bold uppercase tracking-wider transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isTransferring}
-                  className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-semibold shadow-lg shadow-indigo-500/25 flex items-center space-x-2"
+                  className="px-7 py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider shadow-crimson flex items-center space-x-2"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{isTransferring ? 'Posting...' : 'Execute Transfer'}</span>

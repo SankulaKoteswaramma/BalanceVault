@@ -97,24 +97,24 @@ export const UserManagementPage: React.FC = () => {
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Title */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-          User Directory & Access Control
+        <h1 className="text-2xl md:text-3xl font-display font-extrabold text-ink-950 tracking-tight">
+          User Directory & Privilege Governance
         </h1>
-        <p className="text-slate-400 text-sm mt-1">
-          Review identities, enforce account suspensions, and manage administrative privileges.
+        <p className="text-ink-600 text-sm mt-1">
+          Review customer profiles, enforce compliance suspensions, and administer administrative roles.
         </p>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-slate-950 border border-slate-800/80 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="bg-white border border-cream-300 p-4 rounded-2xl shadow-card flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:w-80">
-          <Search className="h-4 w-4 text-slate-500 absolute left-3.5 top-3" />
+          <Search className="h-4 w-4 text-ink-400 absolute left-3.5 top-3" />
           <input
             type="text"
-            placeholder="Search by email or name..."
+            placeholder="Search email or name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+            className="w-full bg-cream-50 border border-cream-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-ink-950 focus:outline-none focus:border-crimson-600 focus:ring-1 focus:ring-crimson-600"
           />
         </div>
 
@@ -122,7 +122,7 @@ export const UserManagementPage: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+            className="bg-cream-50 border border-cream-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-ink-800 focus:outline-none focus:border-crimson-600 font-mono"
           >
             <option value="">All Statuses</option>
             <option value="ACTIVE">ACTIVE</option>
@@ -133,7 +133,7 @@ export const UserManagementPage: React.FC = () => {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+            className="bg-cream-50 border border-cream-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-ink-800 focus:outline-none focus:border-crimson-600 font-mono"
           >
             <option value="">All Roles</option>
             <option value="ACCOUNT_HOLDER">ACCOUNT_HOLDER</option>
@@ -144,52 +144,52 @@ export const UserManagementPage: React.FC = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-cream-300 rounded-2xl shadow-card overflow-hidden">
         {loading ? (
-          <div className="py-20 text-center text-slate-500 text-sm">Loading user directory...</div>
+          <div className="py-24 text-center text-ink-400 font-mono text-xs">Loading directory records...</div>
         ) : users.length === 0 ? (
-          <div className="py-12 text-center text-slate-500 text-sm">No users matching search filters</div>
+          <div className="py-16 text-center text-ink-500 text-xs font-mono">No users matching search filters</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-300">
-              <thead className="bg-slate-900/60 border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
+            <table className="w-full text-left text-sm text-ink-800">
+              <thead className="bg-cream-100 border-b border-cream-300 text-xs uppercase font-mono font-bold text-ink-600">
                 <tr>
-                  <th className="px-6 py-4">User</th>
+                  <th className="px-6 py-4">User Details</th>
                   <th className="px-6 py-4">Role</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Onboarding</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-6 py-4 text-right">Administrative Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-cream-200">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-900/30 transition-colors">
+                  <tr key={u.id} className="hover:bg-cream-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div>
-                        <span className="font-semibold text-white block">{u.profile?.fullName || 'No Name'}</span>
-                        <span className="text-xs text-slate-400 font-mono">{u.email}</span>
+                        <span className="font-bold text-ink-950 block">{u.profile?.fullName || 'Anonymous'}</span>
+                        <span className="text-xs text-ink-500 font-mono">{u.email}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-xs px-2.5 py-1 rounded-full font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                      <span className="text-xs px-2.5 py-1 rounded-full font-mono font-bold bg-cream-100 text-ink-950 border border-cream-300">
                         {u.role}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`text-xs px-2.5 py-1 rounded-full font-bold border ${
+                        className={`text-xs px-2.5 py-1 rounded-full font-mono font-bold border ${
                           u.status === 'ACTIVE'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                            ? 'bg-cream-100 text-ink-950 border-cream-300'
                             : u.status === 'SUSPENDED'
-                            ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                            ? 'bg-crimson-600 text-white border-crimson-700'
+                            : 'bg-crimson-50 text-crimson-800 border-crimson-200'
                         }`}
                       >
                         {u.status}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-xs text-slate-400 font-medium">
+                      <span className="text-xs text-ink-600 font-mono font-semibold">
                         {u.onboardingStatus || 'NOT_STARTED'}
                       </span>
                     </td>
@@ -200,7 +200,7 @@ export const UserManagementPage: React.FC = () => {
                           setSelectedStatus(u.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE');
                           setModalAction('STATUS');
                         }}
-                        className="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 transition-colors"
+                        className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-cream-100 border border-cream-300 text-ink-950 transition-colors"
                       >
                         {u.status === 'ACTIVE' ? 'Suspend' : 'Activate'}
                       </button>
@@ -212,9 +212,9 @@ export const UserManagementPage: React.FC = () => {
                             setSelectedRole(u.role === 'ADMIN' ? 'ACCOUNT_HOLDER' : 'ADMIN');
                             setModalAction('ROLE');
                           }}
-                          className="px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 transition-colors"
+                          className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-crimson-50 hover:bg-crimson-100 border border-crimson-200 text-crimson-800 transition-colors"
                         >
-                          Change Role
+                          Modify Role
                         </button>
                       )}
                     </td>
@@ -228,27 +228,27 @@ export const UserManagementPage: React.FC = () => {
 
       {/* Action Modal */}
       {modalUser && modalAction && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-cream-300 rounded-3xl max-w-md w-full p-8 shadow-elevated relative">
             <button
               onClick={() => {
                 setModalUser(null);
                 setModalAction(null);
               }}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white"
+              className="absolute top-6 right-6 text-ink-400 hover:text-ink-950"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <h3 className="text-lg font-bold text-white mb-1">
-              {modalAction === 'STATUS' ? 'Update User Status' : 'Modify User Role'}
+            <h3 className="text-xl font-display font-bold text-ink-950 mb-1">
+              {modalAction === 'STATUS' ? 'Update User Status' : 'Administer User Role'}
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
-              Target: <span className="font-mono text-slate-200">{modalUser.email}</span>
+            <p className="text-xs text-ink-500 mb-6 font-mono">
+              Target User: <strong className="text-ink-950">{modalUser.email}</strong>
             </p>
 
             {actionError && (
-              <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
+              <div className="mb-4 p-3.5 rounded-xl bg-crimson-50 border border-crimson-200 text-crimson-800 text-xs">
                 {actionError}
               </div>
             )}
@@ -256,13 +256,13 @@ export const UserManagementPage: React.FC = () => {
             <div className="space-y-4">
               {modalAction === 'STATUS' ? (
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                    Select New Status
+                  <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
+                    Target Status
                   </label>
                   <select
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value as UserStatus)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100"
+                    className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 font-mono focus:outline-none focus:border-crimson-600"
                   >
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="SUSPENDED">SUSPENDED</option>
@@ -271,13 +271,13 @@ export const UserManagementPage: React.FC = () => {
                 </div>
               ) : (
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                    Select New Role
+                  <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
+                    Assigned Role
                   </label>
                   <select
                     value={selectedRole}
                     onChange={(e) => setSelectedRole(e.target.value as Role)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100"
+                    className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 font-mono focus:outline-none focus:border-crimson-600"
                   >
                     <option value="ACCOUNT_HOLDER">ACCOUNT_HOLDER</option>
                     <option value="ADMIN">ADMIN</option>
@@ -286,27 +286,27 @@ export const UserManagementPage: React.FC = () => {
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Administrative Reason / Justification
+                <label className="block text-xs font-bold text-ink-700 uppercase tracking-wider mb-1.5">
+                  Administrative Justification (Mandatory for Audit Trail)
                 </label>
                 <textarea
                   required
                   rows={3}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  placeholder="Mandatory reason for audit logging..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100"
+                  placeholder="Record compliance reason for this state change..."
+                  className="w-full bg-cream-50 border border-cream-300 rounded-xl px-4 py-2.5 text-sm text-ink-950 focus:outline-none focus:border-crimson-600"
                 />
               </div>
 
-              <div className="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+              <div className="flex justify-end space-x-3 pt-4 border-t border-cream-200">
                 <button
                   type="button"
                   onClick={() => {
                     setModalUser(null);
                     setModalAction(null);
                   }}
-                  className="px-4 py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300"
+                  className="px-4 py-2.5 text-xs font-bold rounded-xl bg-cream-200 text-ink-700 hover:bg-cream-300"
                 >
                   Cancel
                 </button>
@@ -314,9 +314,9 @@ export const UserManagementPage: React.FC = () => {
                   type="button"
                   disabled={isUpdating || !reason}
                   onClick={modalAction === 'STATUS' ? handleUpdateStatus : handleUpdateRole}
-                  className="px-5 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white"
+                  className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-crimson-600 hover:bg-crimson-700 disabled:opacity-50 text-white shadow-crimson"
                 >
-                  {isUpdating ? 'Saving...' : 'Confirm Update'}
+                  {isUpdating ? 'Saving...' : 'Commit Change'}
                 </button>
               </div>
             </div>
